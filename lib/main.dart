@@ -23,9 +23,9 @@ class CoinTrackApp extends StatelessWidget {
           bodyMedium: TextStyle(color: Colors.white70),
         ),
       ),
-      initialRoute: '/',
+      initialRoute: '/home',
       routes: {
-        '/': (context) => HomeScreen(),
+        '/home': (context) => HomeScreen(),
         '/conversion': (context) => ConversionScreen(),
         '/charts': (context) => ChartsScreen(),
       },
