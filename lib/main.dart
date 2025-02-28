@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:coin_track/screens/home/home.dart';
-import 'package:coin_track/screens/conversion/conversion.dart';
-import 'package:coin_track/screens/charts/charts.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(CoinTrackApp());
@@ -23,12 +21,7 @@ class CoinTrackApp extends StatelessWidget {
           bodyMedium: TextStyle(color: Colors.white70),
         ),
       ),
-      initialRoute: '/home',
-      routes: {
-        '/home': (context) => HomeScreen(),
-        '/conversion': (context) => ConversionScreen(),
-        '/charts': (context) => ChartsScreen(),
-      },
+      home: HomePage(),
     );
   }
 }
