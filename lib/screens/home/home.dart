@@ -50,7 +50,7 @@ class HomePage extends StatelessWidget {
       bottomNavigationBar: Obx(() {
         return BottomNavigationBar(
           backgroundColor: Color(0xFF1E1E1E),
-          selectedItemColor: Color(0xFFF0B90B),
+          selectedItemColor: Theme.of(context).primaryColor,
           unselectedItemColor: Colors.white70,
           currentIndex: homeController.currentIndex.value,
           onTap: homeController.onTabTapped,

@@ -9,7 +9,11 @@ class WelcomeScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.attach_money, size: 100, color: Color(0xFFF0B90B)),
+          Icon(
+            Icons.attach_money,
+            size: 100,
+            color: Theme.of(context).primaryColor,
+          ),
           SizedBox(height: 20),
           Text(
             'Bem-vindo ao CoinTrack',
