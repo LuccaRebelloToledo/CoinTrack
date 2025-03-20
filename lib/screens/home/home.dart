@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../screens/charts/charts.dart';
 import '../../screens/conversion/conversion.dart';
 import '../../screens/welcome/welcome.dart';
 
@@ -26,11 +25,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeController homeController = Get.put(HomeController());
 
-    final List<Widget> children = [
-      WelcomeScreen(),
-      ConversionScreen(),
-      ChartsScreen(),
-    ];
+    final List<Widget> children = [WelcomeScreen(), ConversionScreen()];
 
     return Scaffold(
       appBar: AppBar(
@@ -62,10 +57,6 @@ class HomePage extends StatelessWidget {
             BottomNavigationBarItem(
               icon: Hero(tag: 'conversion-icon', child: Icon(Icons.swap_horiz)),
               label: 'Conversão',
-            ),
-            BottomNavigationBarItem(
-              icon: Hero(tag: 'charts-icon', child: Icon(Icons.bar_chart)),
-              label: 'Gráficos',
             ),
           ],
         );

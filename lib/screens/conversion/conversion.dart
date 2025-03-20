@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 
 import 'fade_animation.dart';
 
+import 'package:coin_track/screens/chart/chart.dart';
+
 class ConversionController extends GetxController {
   var conversionItems =
       <Map<String, String>>[
@@ -12,14 +14,6 @@ class ConversionController extends GetxController {
         {'currency': 'JPY', 'rate': '0.037 BRL'},
         {'currency': 'AUD', 'rate': '3.70 BRL'},
       ].obs;
-
-  void addConversionItem(Map<String, String> item) {
-    conversionItems.add(item);
-  }
-
-  void removeConversionItem(int index) {
-    conversionItems.removeAt(index);
-  }
 }
 
 class ConversionScreen extends StatelessWidget {
@@ -37,20 +31,23 @@ class ConversionScreen extends StatelessWidget {
             physics: const AlwaysScrollableScrollPhysics(),
             itemCount: controller.conversionItems.length,
             itemBuilder: (context, index) {
+              final item = controller.conversionItems[index];
               return FadeInItem(
                 index: index,
-                child: ConversionCard(item: controller.conversionItems[index]),
+                child: GestureDetector(
+                  onTap: () {
+                    Get.to(
+                      transition: Transition.rightToLeftWithFade,
+                      duration: const Duration(milliseconds: 700),
+                      () => ChartScreen(currency: item['currency']!),
+                    );
+                  },
+                  child: ConversionCard(item: item),
+                ),
               );
             },
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () {
-          controller.addConversionItem({'currency': 'CAD', 'rate': '4.10 BRL'});
-        },
-        child: const Icon(Icons.add, color: Colors.black),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:coin_track/screens/home/home.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
 void main() {
   runApp(CoinTrackApp());
@@ -10,7 +11,7 @@ class CoinTrackApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'CoinTrack',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
