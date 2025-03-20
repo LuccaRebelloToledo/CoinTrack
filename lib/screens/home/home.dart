@@ -1,41 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../screens/charts/charts.dart';
 import '../../screens/conversion/conversion.dart';
 import '../../screens/welcome/welcome.dart';
 
-class HomePage extends StatefulWidget {
+class HomeController extends GetxController {
+  var currentIndex = 0.obs;
+  var isLoading = false.obs;
+
+  void onTabTapped(int index) async {
+    if (index == currentIndex.value) return;
+
+    isLoading.value = true;
+    await Future.delayed(Duration(milliseconds: 500));
+    currentIndex.value = index;
+    isLoading.value = false;
+  }
+}
+
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  HomePageState createState() => HomePageState();
-}
-
-class HomePageState extends State<HomePage> {
-  int _currentIndex = 0;
-  bool _isLoading = false;
-
-  final List<Widget> _children = [
-    WelcomeScreen(),
-    ConversionScreen(),
-    ChartsScreen(),
-  ];
-
-  void _onTabTapped(int index) async {
-    if (index == _currentIndex) return;
-
-    setState(() {
-      _isLoading = true;
-    });
-    await Future.delayed(Duration(milliseconds: 500));
-    setState(() {
-      _isLoading = false;
-      _currentIndex = index;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final HomeController homeController = Get.put(HomeController());
+
+    final List<Widget> children = [
+      WelcomeScreen(),
+      ConversionScreen(),
+      ChartsScreen(),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF121212),
@@ -43,36 +39,37 @@ class HomePageState extends State<HomePage> {
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: Stack(
-        children: [
-          _children[_currentIndex],
-          if (_isLoading)
-            Container(
-              color: Colors.black54,
-              child: Center(
-                child: CircularProgressIndicator(color: Color(0xFFF0B90B)),
-              ),
+      body: Obx(() {
+        return FadeTransition(
+          opacity: AlwaysStoppedAnimation<double>(
+            homeController.isLoading.value ? 0.5 : 1.0,
+          ),
+          child: children[homeController.currentIndex.value],
+        );
+      }),
+      bottomNavigationBar: Obx(() {
+        return BottomNavigationBar(
+          backgroundColor: Color(0xFF1E1E1E),
+          selectedItemColor: Color(0xFFF0B90B),
+          unselectedItemColor: Colors.white70,
+          currentIndex: homeController.currentIndex.value,
+          onTap: homeController.onTabTapped,
+          items: [
+            BottomNavigationBarItem(
+              icon: Hero(tag: 'home-icon', child: Icon(Icons.home)),
+              label: 'Início',
             ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xFF1E1E1E),
-        selectedItemColor: Color(0xFFF0B90B),
-        unselectedItemColor: Colors.white70,
-        currentIndex: _currentIndex,
-        onTap: _onTabTapped,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Início'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.swap_horiz),
-            label: 'Conversão',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Gráficos',
-          ),
-        ],
-      ),
+            BottomNavigationBarItem(
+              icon: Hero(tag: 'conversion-icon', child: Icon(Icons.swap_horiz)),
+              label: 'Conversão',
+            ),
+            BottomNavigationBarItem(
+              icon: Hero(tag: 'charts-icon', child: Icon(Icons.bar_chart)),
+              label: 'Gráficos',
+            ),
+          ],
+        );
+      }),
     );
   }
 }
