@@ -1,3 +1,4 @@
+import 'package:coin_track/modules/conversions/services/delete_conversions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,6 +12,8 @@ import 'package:coin_track/modules/conversions/services/get_conversions.dart';
 
 class ConversionController extends GetxController {
   final GetConversionsService _getConversionsService = GetConversionsService();
+  final DeleteConversionsService _deleteConversionsService =
+      DeleteConversionsService();
   var conversionItems = <Conversion>[].obs;
 
   @override
@@ -24,7 +27,47 @@ class ConversionController extends GetxController {
       final conversions = await _getConversionsService.get();
       conversionItems.assignAll(conversions);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch conversions: $e');
+      Get.snackbar(
+        'Algo deu errado :(',
+        'Não foi possível carregar as conversões.',
+        icon: const Icon(Icons.error, color: Colors.red),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.black87,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+        margin: const EdgeInsets.all(16.0),
+        borderRadius: 8.0,
+      );
+    }
+  }
+
+  Future<void> deleteConversions(Conversion conversion) async {
+    try {
+      await _deleteConversionsService.delete(conversion);
+      conversionItems.remove(conversion);
+      Get.snackbar(
+        'Sucesso :)',
+        'Conversão excluída com sucesso.',
+        icon: const Icon(Icons.check_circle, color: Colors.green),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.black87,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+        margin: const EdgeInsets.all(16.0),
+        borderRadius: 8.0,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Algo deu errado :(',
+        'Não foi possível excluir a conversão.',
+        icon: const Icon(Icons.error, color: Colors.red),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.black87,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+        margin: const EdgeInsets.all(16.0),
+        borderRadius: 8.0,
+      );
     }
   }
 }
@@ -55,7 +98,11 @@ class ConversionScreen extends StatelessWidget {
                       () => ChartScreen(currency: item.toSymbol),
                     );
                   },
-                  child: ConversionCard(item: item),
+                  child: ConversionCard(
+                    item: item,
+                    onDismissed:
+                        () async => {await controller.deleteConversions(item)},
+                  ),
                 ),
               );
             },
@@ -67,6 +114,17 @@ class ConversionScreen extends StatelessWidget {
         onPressed: () async {
           final result = await Get.dialog(ConversionAddModal());
           if (result == true) {
+            Get.snackbar(
+              'Sucesso :)',
+              'Conversão salva com sucesso.',
+              icon: const Icon(Icons.check_circle, color: Colors.green),
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.black87,
+              colorText: Colors.white,
+              duration: const Duration(seconds: 3),
+              margin: const EdgeInsets.all(16.0),
+              borderRadius: 8.0,
+            );
             controller.fetchConversions();
           }
         },
