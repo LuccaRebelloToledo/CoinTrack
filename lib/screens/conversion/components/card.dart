@@ -7,29 +7,37 @@ class ConversionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: const Color(0xFF1E1E1E),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 4,
-      margin: const EdgeInsets.only(bottom: 16.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              item.fromSymbol,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+    return SizedBox(
+      width: double.infinity,
+      child: Card(
+        color: const Color(0xFF1E1E1E),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${item.amount.toStringAsFixed(2)} ${item.fromSymbol} para ${item.toSymbol}',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            Text(
-              item.rate.toString(),
-              style: const TextStyle(fontSize: 16, color: Colors.white70),
-            ),
-          ],
+              const SizedBox(height: 8),
+              Text(
+                'Taxa: ${item.rate.toStringAsFixed(4)}',
+                style: const TextStyle(fontSize: 16, color: Colors.white70),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Total convertido: ${item.result.toStringAsFixed(2)} ${item.toSymbol}',
+                style: const TextStyle(fontSize: 16, color: Colors.white),
+              ),
+            ],
+          ),
         ),
       ),
     );
