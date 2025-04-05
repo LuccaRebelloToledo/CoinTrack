@@ -11,7 +11,7 @@ class GetCurrenciesService {
 
       return currencies;
     } catch (e) {
-      throw Exception('Error fetching currencies: $e');
+      throw Exception('$e');
     }
   }
 }

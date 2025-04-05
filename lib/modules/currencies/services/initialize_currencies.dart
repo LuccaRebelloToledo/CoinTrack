@@ -23,7 +23,7 @@ class InitializeCurrenciesService {
         }
       }
     } catch (e) {
-      throw Exception('Error initializing currencies: $e');
+      throw Exception('$e');
     }
   }
 }

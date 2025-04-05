@@ -13,10 +13,10 @@ class GetSupportedCodesService {
             .map((code) => SupportedCode.fromJson(code))
             .toList();
       } else {
-        throw Exception('Failed to fetch supported codes');
+        throw Exception('Erro ao buscar os códigos suportados');
       }
     } catch (e) {
-      throw Exception('Error fetching supported codes: $e');
+      throw Exception('$e');
     }
   }
 }

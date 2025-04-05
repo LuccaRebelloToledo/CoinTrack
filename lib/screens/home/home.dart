@@ -56,7 +56,7 @@ class HomePage extends StatelessWidget {
             ),
             BottomNavigationBarItem(
               icon: Hero(tag: 'conversion-icon', child: Icon(Icons.swap_horiz)),
-              label: 'Conversão',
+              label: 'Conversões',
             ),
           ],
         );

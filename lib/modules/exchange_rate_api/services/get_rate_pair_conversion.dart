@@ -12,10 +12,12 @@ class GetRatePairConversionService {
       if (response.data['result'] == 'success') {
         return response.data['conversion_rate'];
       } else {
-        throw Exception('Failed to fetch the rate of the pair conversion');
+        throw Exception(
+          'Error ao buscar a taxa de conversão para $fromSymbol/$toSymbol',
+        );
       }
     } catch (e) {
-      throw Exception('Error fetching the rate of the pair conversion: $e');
+      throw Exception('$e');
     }
   }
 }

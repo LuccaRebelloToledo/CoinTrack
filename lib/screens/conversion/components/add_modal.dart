@@ -30,7 +30,7 @@ class ConversionAddController extends GetxController {
       final fetchedCurrencies = await _getCurrenciesService.get();
       currencies.assignAll(fetchedCurrencies.map((c) => c.symbol));
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch currencies: $e');
+      Get.snackbar('Erro', 'Falha ao buscar moedas: $e');
     }
   }
 
@@ -45,7 +45,7 @@ class ConversionAddController extends GetxController {
         );
         calculateResult();
       } catch (e) {
-        Get.snackbar('Error', 'Failed to fetch conversion rate: $e');
+        Get.snackbar('Erro', 'Falha ao buscar taxa de conversão: $e');
       }
     }
   }
@@ -68,7 +68,7 @@ class ConversionAddController extends GetxController {
 
       Get.back(result: true);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to save conversion: $e');
+      Get.snackbar('Erro', 'Falha ao salvar conversão: $e');
     }
   }
 }
@@ -78,6 +78,8 @@ class ConversionAddModal extends StatelessWidget {
 
   ConversionAddModal({super.key}) {
     addController = Get.put(ConversionAddController());
+    addController.amount.value = 0.0;
+    addController.result.value = 0.0;
   }
 
   @override
@@ -95,7 +97,7 @@ class ConversionAddModal extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Add Conversion',
+                        'Adicionar Conversão',
                         style: Theme.of(
                           context,
                         ).textTheme.bodyLarge?.copyWith(fontSize: 18),
@@ -110,7 +112,7 @@ class ConversionAddModal extends StatelessWidget {
                                   ? null
                                   : addController.fromCurrency.value,
                           hint: Text(
-                            'Select From Currency',
+                            'Selecione a Moeda de Origem',
                             style: TextStyle(
                               fontSize: 14,
                               color:
@@ -151,7 +153,7 @@ class ConversionAddModal extends StatelessWidget {
                                   ? null
                                   : addController.toCurrency.value,
                           hint: Text(
-                            'Select To Currency',
+                            'Selecione a Moeda de Destino',
                             style: TextStyle(
                               fontSize: 14,
                               color:
@@ -196,7 +198,7 @@ class ConversionAddModal extends StatelessWidget {
                             context,
                           ).textTheme.bodyMedium?.copyWith(fontSize: 14),
                           decoration: InputDecoration(
-                            labelText: 'Amount',
+                            labelText: 'Quantidade',
                             labelStyle: Theme.of(
                               context,
                             ).textTheme.bodyMedium?.copyWith(fontSize: 14),
@@ -225,12 +227,12 @@ class ConversionAddModal extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Rate: ${addController.rate.value.toStringAsFixed(2)}',
+                        'Taxa: ${addController.rate.value.toStringAsFixed(2)}',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Result: ${addController.result.value.toStringAsFixed(2)}',
+                        'Resultado: ${addController.result.value.toStringAsFixed(2)}',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       const SizedBox(height: 16),
@@ -240,7 +242,7 @@ class ConversionAddModal extends StatelessWidget {
                         ),
                         onPressed: () => addController.saveConversion(),
                         child: const Text(
-                          'Save',
+                          'Salvar',
                           style: TextStyle(color: Colors.black),
                         ),
                       ),
