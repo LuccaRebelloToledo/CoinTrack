@@ -1,8 +1,30 @@
+import 'package:coin_track/modules/currencies/services/initialize_currencies.dart';
 import 'package:coin_track/screens/home/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/route_manager.dart';
+import 'shared/database/database.dart';
 
-void main() {
+Future<void> initializeCurrencies() async {
+  final initializeCurrenciesService = InitializeCurrenciesService();
+  await initializeCurrenciesService.initialize();
+}
+
+Future<void> initializeDatabase() async {
+  final databaseHelper = DatabaseHelper();
+  await databaseHelper.initializeDatabase();
+}
+
+Future<void> initializeApp() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure that plugin services are initialized
+  await dotenv.load(); // Load environment variables
+  await initializeDatabase(); // Initialize the database
+  await initializeCurrencies(); // Initialize currencies
+}
+
+Future<void> main() async {
+  await initializeApp(); // Initialize the app
+
   runApp(CoinTrackApp());
 }
 
