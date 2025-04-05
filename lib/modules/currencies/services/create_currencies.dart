@@ -9,7 +9,7 @@ class CreateCurrenciesService {
     try {
       await _currencyRepository.create(currency);
     } catch (e) {
-      throw Exception('Error fetching currencies: $e');
+      throw Exception('Error creating currency: $e');
     }
   }
 }

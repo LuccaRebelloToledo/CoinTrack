@@ -4,11 +4,10 @@ import 'package:dio/dio.dart';
 
 class GetSupportedCodesService {
   final Dio _dio = Dio();
-  final supportedCodesURL = '$exchangeRateAPIBaseURL/codes';
 
   Future<List<SupportedCode>> get() async {
     try {
-      final response = await _dio.get(supportedCodesURL);
+      final response = await _dio.get('$exchangeRateAPIBaseURL/codes');
       if (response.data['result'] == 'success') {
         return (response.data['supported_codes'] as List)
             .map((code) => SupportedCode.fromJson(code))
