@@ -17,7 +17,7 @@ Future<void> initializeDatabase() async {
 
 Future<void> initializeApp() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure that plugin services are initialized
-  await dotenv.load(); // Load environment variables
+  await dotenv.load(); // Load environment variables from .env file
   await initializeDatabase(); // Initialize the database
   await initializeCurrencies(); // Initialize currencies
 }
