@@ -54,6 +54,14 @@ class ConversionAddController extends GetxController {
     result.value = amount.value * rate.value;
   }
 
+  void clearFields() {
+    fromCurrency.value = '';
+    toCurrency.value = '';
+    rate.value = 0.0;
+    amount.value = 0.0;
+    result.value = 0.0;
+  }
+
   Future<void> saveConversion() async {
     try {
       final conversion = Conversion(
@@ -66,6 +74,7 @@ class ConversionAddController extends GetxController {
 
       await _createConversionsService.create(conversion);
 
+      clearFields();
       Get.back(result: true);
     } catch (e) {
       Get.snackbar('Erro', 'Falha ao salvar conversão: $e');
