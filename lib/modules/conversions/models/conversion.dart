@@ -2,9 +2,9 @@ class Conversion {
   final int? id;
   final String fromSymbol;
   final String toSymbol;
-  final double rate;
+  double rate;
   final double amount;
-  final double result;
+  double result;
 
   Conversion({
     this.id,

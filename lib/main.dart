@@ -1,9 +1,12 @@
-import 'package:coin_track/modules/currencies/services/initialize_currencies.dart';
-import 'package:coin_track/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/route_manager.dart';
+
+import 'package:coin_track/modules/conversions/services/get_and_update_latest_rates.dart';
+import 'package:coin_track/modules/currencies/services/initialize_currencies.dart';
 import 'shared/database/database.dart';
+
+import 'package:coin_track/screens/home/home.dart';
 
 Future<void> initializeCurrencies() async {
   final initializeCurrenciesService = InitializeCurrenciesService();
@@ -15,11 +18,17 @@ Future<void> initializeDatabase() async {
   await databaseHelper.initializeDatabase();
 }
 
+Future<void> updateConversionsRate() async {
+  final getAndUpdateLatestRatesService = GetAndUpdateLatestRatesService();
+  await getAndUpdateLatestRatesService.update();
+}
+
 Future<void> initializeApp() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure that plugin services are initialized
   await dotenv.load(); // Load environment variables from .env file
   await initializeDatabase(); // Initialize the database
   await initializeCurrencies(); // Initialize currencies
+  await updateConversionsRate(); // Update conversions rate
 }
 
 Future<void> main() async {
