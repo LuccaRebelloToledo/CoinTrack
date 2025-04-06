@@ -45,6 +45,7 @@ class CoinTrackApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'CoinTrack',
       debugShowCheckedModeBanner: false,
+      locale: const Locale('pt', 'BR'),
       theme: ThemeData(
         primaryColor: Color(0xFFF0B90B),
         scaffoldBackgroundColor: Color(0xFF121212),
