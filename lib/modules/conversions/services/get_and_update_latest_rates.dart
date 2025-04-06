@@ -29,7 +29,7 @@ class GetAndUpdateLatestRatesService {
         }
       }
     } catch (e) {
-      throw Exception('Error updating conversions: $e');
+      throw Exception('Error updating conversions rate: $e');
     }
   }
 }
