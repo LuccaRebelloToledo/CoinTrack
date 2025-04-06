@@ -119,31 +119,36 @@ class ConversionScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Obx(
-          () => ListView.builder(
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: controller.conversionItems.length,
-            itemBuilder: (context, index) {
-              final item = controller.conversionItems[index];
-              return FadeInItem(
-                index: index,
-                child: GestureDetector(
-                  onTap: () {
-                    Get.to(
-                      transition: Transition.rightToLeftWithFade,
-                      duration: const Duration(milliseconds: 700),
-                      () => ChartScreen(currency: item.toSymbol),
-                    );
-                  },
-                  child: ConversionCard(
-                    item: item,
-                    onDismissed:
-                        () async => await controller.deleteConversions(item),
-                    onEdit:
-                        () async => await controller.updateConversions(item),
+          () => RefreshIndicator(
+            onRefresh: controller.fetchConversions,
+            color: Theme.of(context).primaryColor,
+            backgroundColor: Colors.black87,
+            child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: controller.conversionItems.length,
+              itemBuilder: (context, index) {
+                final item = controller.conversionItems[index];
+                return FadeInItem(
+                  index: index,
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(
+                        transition: Transition.rightToLeftWithFade,
+                        duration: const Duration(milliseconds: 700),
+                        () => ChartScreen(currency: item.toSymbol),
+                      );
+                    },
+                    child: ConversionCard(
+                      item: item,
+                      onDismissed:
+                          () async => await controller.deleteConversions(item),
+                      onEdit:
+                          () async => await controller.updateConversions(item),
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),
