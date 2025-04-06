@@ -3,7 +3,7 @@ class Conversion {
   final String fromSymbol;
   final String toSymbol;
   double rate;
-  final double amount;
+  double amount;
   double result;
 
   Conversion({

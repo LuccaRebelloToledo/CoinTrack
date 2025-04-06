@@ -1,4 +1,3 @@
-import 'package:coin_track/modules/conversions/services/delete_conversions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,11 +6,17 @@ import 'components/card.dart';
 import 'components/fade_animation.dart';
 
 import 'package:coin_track/screens/chart/chart.dart';
+
 import 'package:coin_track/modules/conversions/models/conversion.dart';
+
 import 'package:coin_track/modules/conversions/services/get_conversions.dart';
+import 'package:coin_track/modules/conversions/services/delete_conversions.dart';
+import 'package:coin_track/modules/conversions/services/update_conversions.dart';
 
 class ConversionController extends GetxController {
   final GetConversionsService _getConversionsService = GetConversionsService();
+  final UpdateConversionsService _updateConversionsService =
+      UpdateConversionsService();
   final DeleteConversionsService _deleteConversionsService =
       DeleteConversionsService();
   var conversionItems = <Conversion>[].obs;
@@ -41,10 +46,41 @@ class ConversionController extends GetxController {
     }
   }
 
+  Future<void> updateConversions(Conversion conversion) async {
+    try {
+      await _updateConversionsService.update(conversion);
+      conversionItems.refresh();
+
+      Get.snackbar(
+        'Sucesso :)',
+        'Conversão atualizada com sucesso.',
+        icon: const Icon(Icons.check_circle, color: Colors.green),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.black87,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+        margin: const EdgeInsets.all(16.0),
+        borderRadius: 8.0,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Algo deu errado :(',
+        'Não foi possível atualizar a conversão.',
+        icon: const Icon(Icons.error, color: Colors.red),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.black87,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+        margin: const EdgeInsets.all(16.0),
+        borderRadius: 8.0,
+      );
+    }
+  }
+
   Future<void> deleteConversions(Conversion conversion) async {
     try {
       await _deleteConversionsService.delete(conversion);
-      conversionItems.remove(conversion);
+
       Get.snackbar(
         'Sucesso :)',
         'Conversão excluída com sucesso.',
@@ -101,7 +137,9 @@ class ConversionScreen extends StatelessWidget {
                   child: ConversionCard(
                     item: item,
                     onDismissed:
-                        () async => {await controller.deleteConversions(item)},
+                        () async => await controller.deleteConversions(item),
+                    onEdit:
+                        () async => await controller.updateConversions(item),
                   ),
                 ),
               );
