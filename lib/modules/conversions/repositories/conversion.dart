@@ -20,16 +20,7 @@ class ConversionRepository {
     final db = await _databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('conversions');
 
-    return List.generate(maps.length, (i) {
-      return Conversion(
-        id: maps[i]['id'],
-        fromSymbol: maps[i]['from_symbol'],
-        toSymbol: maps[i]['to_symbol'],
-        rate: maps[i]['rate'],
-        amount: maps[i]['amount'],
-        result: maps[i]['result'],
-      );
-    });
+    return maps.map((map) => Conversion.fromMap(map)).toList();
   }
 
   Future<Conversion?> read(int id) async {
@@ -41,14 +32,7 @@ class ConversionRepository {
     );
 
     if (maps.isNotEmpty) {
-      return Conversion(
-        id: maps[0]['id'],
-        fromSymbol: maps[0]['from_symbol'],
-        toSymbol: maps[0]['to_symbol'],
-        rate: maps[0]['rate'],
-        amount: maps[0]['amount'],
-        result: maps[0]['result'],
-      );
+      return Conversion.fromMap(maps.first);
     }
 
     return null;
