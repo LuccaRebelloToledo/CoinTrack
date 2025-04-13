@@ -135,7 +135,11 @@ class ConversionScreen extends StatelessWidget {
                       Get.to(
                         transition: Transition.rightToLeftWithFade,
                         duration: const Duration(milliseconds: 700),
-                        () => ChartScreen(currency: item.toSymbol),
+                        () => ChartScreen(
+                          fromSymbol: item.fromSymbol,
+                          toSymbol: item.toSymbol,
+                          currentRate: item.rate,
+                        ),
                       );
                     },
                     child: ConversionCard(

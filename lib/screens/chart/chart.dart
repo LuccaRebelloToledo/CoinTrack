@@ -3,41 +3,93 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
 
-class ChartScreen extends StatelessWidget {
-  const ChartScreen({super.key, required this.currency});
+import 'package:coin_track/modules/economia_awesome_api/services/get_currency_history.dart';
 
-  final String currency;
+class ChartScreen extends StatefulWidget {
+  const ChartScreen({
+    super.key,
+    required this.fromSymbol,
+    required this.toSymbol,
+    required this.currentRate,
+  });
 
-  List<FlSpot> getChartData() {
-    final now = DateTime.now();
-    final random = Random();
-    return List.generate(12, (index) {
-      final month = now.subtract(Duration(days: 30 * index));
-      final baseValue = 5.0 + (month.month % 3) * 0.2;
-      final variation = random.nextDouble() * 2 - 1;
-      final value = (baseValue + variation).clamp(4.0, 6.0);
-      return FlSpot(11 - index.toDouble(), value);
-    });
+  final String fromSymbol;
+  final String toSymbol;
+  final double currentRate;
+
+  @override
+  _ChartScreenState createState() => _ChartScreenState();
+}
+
+class _ChartScreenState extends State<ChartScreen> {
+  late List<FlSpot> chartData;
+  late List<String> xAxisLabels;
+  final CurrencyHistoryService _currencyHistoryService =
+      CurrencyHistoryService();
+
+  @override
+  void initState() {
+    super.initState();
+    chartData = [];
+    xAxisLabels = [];
+    _loadChartData();
   }
 
-  List<String> getXAxisLabels() {
+  Future<void> _loadChartData() async {
     final now = DateTime.now();
-    final dateFormat = DateFormat('MMM');
-    return List.generate(12, (index) {
-      final month = now.subtract(Duration(days: 30 * index));
-      return dateFormat.format(month);
-    }).reversed.toList();
-  }
+    final dateFormat = DateFormat('yyyyMMdd');
 
-  String getXAxisLabel(int index) {
-    final labels = getXAxisLabels();
-    return (index >= 0 && index < labels.length) ? labels[index] : '';
+    final threeMonthsAgo = dateFormat.format(
+      now.subtract(Duration(days: 30 * 3)),
+    );
+    
+    final twoMonthsAgo = dateFormat.format(
+      now.subtract(Duration(days: 30 * 2)),
+    );
+
+    final oneMonthAgo = dateFormat.format(now.subtract(Duration(days: 30)));
+
+    try {
+      final threeMonthsRate = await _currencyHistoryService.get(
+        widget.fromSymbol,
+        widget.toSymbol,
+        threeMonthsAgo,
+        threeMonthsAgo,
+      );
+
+      final twoMonthsRate = await _currencyHistoryService.get(
+        widget.fromSymbol,
+        widget.toSymbol,
+        twoMonthsAgo,
+        twoMonthsAgo,
+      );
+
+      final oneMonthRate = await _currencyHistoryService.get(
+        widget.fromSymbol,
+        widget.toSymbol,
+        oneMonthAgo,
+        oneMonthAgo,
+      );
+
+      if (mounted) {
+        setState(() {
+          chartData = [
+            FlSpot(0, threeMonthsRate),
+            FlSpot(1, twoMonthsRate),
+            FlSpot(2, oneMonthRate),
+            FlSpot(3, widget.currentRate),
+          ];
+          xAxisLabels = ['3 Meses', '2 Meses', '1 Mês', 'Atual'];
+        });
+      }
+    } catch (e) {
+      print("Erro ao carregar os dados: $e");
+    }
   }
 
   LineChartData buildLineChartData() {
-    final data = getChartData();
-    final minY = data.map((spot) => spot.y).reduce(min);
-    final maxY = data.map((spot) => spot.y).reduce(max);
+    final minY = chartData.map((spot) => spot.y).reduce(min);
+    final maxY = chartData.map((spot) => spot.y).reduce(max);
 
     return LineChartData(
       gridData: FlGridData(show: false),
@@ -48,7 +100,7 @@ class ChartScreen extends StatelessWidget {
             showTitles: true,
             getTitlesWidget: (value, meta) {
               return Text(
-                getXAxisLabel(value.toInt()),
+                xAxisLabels[value.toInt()],
                 style: const TextStyle(fontSize: 10, color: Colors.white),
               );
             },
@@ -71,7 +123,7 @@ class ChartScreen extends StatelessWidget {
       borderData: FlBorderData(show: false),
       lineBarsData: [
         LineChartBarData(
-          spots: data,
+          spots: chartData,
           isCurved: false,
           color: Colors.yellow,
           dotData: FlDotData(show: false),
@@ -88,7 +140,16 @@ class ChartScreen extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: LineChart(buildLineChartData()),
+        child:
+            chartData.isNotEmpty
+                ? LineChart(buildLineChartData())
+                : Center(
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).primaryColor,
+                    backgroundColor: Colors.black87,
+                    strokeWidth: 2,
+                  ),
+                ),
       ),
     );
   }
