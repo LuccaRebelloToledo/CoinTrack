@@ -42,11 +42,9 @@ class _ChartScreenState extends State<ChartScreen> {
     final threeMonthsAgo = dateFormat.format(
       now.subtract(Duration(days: 30 * 3)),
     );
-    
     final twoMonthsAgo = dateFormat.format(
       now.subtract(Duration(days: 30 * 2)),
     );
-
     final oneMonthAgo = dateFormat.format(now.subtract(Duration(days: 30)));
 
     try {
@@ -71,17 +69,21 @@ class _ChartScreenState extends State<ChartScreen> {
         oneMonthAgo,
       );
 
-      if (mounted) {
-        setState(() {
-          chartData = [
-            FlSpot(0, threeMonthsRate),
-            FlSpot(1, twoMonthsRate),
-            FlSpot(2, oneMonthRate),
-            FlSpot(3, widget.currentRate),
-          ];
-          xAxisLabels = ['3 Meses', '2 Meses', '1 Mês', 'Atual'];
-        });
-      }
+      setState(() {
+        chartData = [
+          FlSpot(0, threeMonthsRate),
+          FlSpot(1, twoMonthsRate),
+          FlSpot(2, oneMonthRate),
+          FlSpot(3, widget.currentRate),
+        ];
+
+        xAxisLabels = [
+          DateFormat.MMM().format(DateTime.parse(threeMonthsAgo)),
+          DateFormat.MMM().format(DateTime.parse(twoMonthsAgo)),
+          DateFormat.MMM().format(DateTime.parse(oneMonthAgo)),
+          DateFormat.MMM().format(now),
+        ];
+      });
     } catch (e) {
       print("Erro ao carregar os dados: $e");
     }
@@ -99,8 +101,9 @@ class _ChartScreenState extends State<ChartScreen> {
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: (value, meta) {
+              final label = xAxisLabels[value.toInt()];
               return Text(
-                xAxisLabels[value.toInt()],
+                label,
                 style: const TextStyle(fontSize: 10, color: Colors.white),
               );
             },
