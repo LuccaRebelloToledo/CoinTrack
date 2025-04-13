@@ -41,6 +41,7 @@ class ConversionAddController extends GetxController {
         margin: const EdgeInsets.all(16.0),
         borderRadius: 8.0,
       );
+      Get.back(result: false);
     }
   }
 
