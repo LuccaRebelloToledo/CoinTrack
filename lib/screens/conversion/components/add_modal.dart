@@ -30,7 +30,17 @@ class ConversionAddController extends GetxController {
       final fetchedCurrencies = await _getCurrenciesService.get();
       currencies.assignAll(fetchedCurrencies.map((c) => c.symbol));
     } catch (e) {
-      Get.snackbar('Erro', 'Falha ao buscar moedas: $e');
+      Get.snackbar(
+        'Algo deu errado :(',
+        'Ocorreu um erro ao buscar as moedas disponíveis para conversão.',
+        icon: const Icon(Icons.error, color: Colors.red),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.black87,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+        margin: const EdgeInsets.all(16.0),
+        borderRadius: 8.0,
+      );
     }
   }
 
@@ -45,7 +55,17 @@ class ConversionAddController extends GetxController {
         );
         calculateResult();
       } catch (e) {
-        Get.snackbar('Erro', 'Falha ao buscar taxa de conversão: $e');
+        Get.snackbar(
+          'Algo deu errado :(',
+          'Ocorreu um erro ao buscar a taxa de conversão de $fromCurrency.value para $toCurrency.value',
+          icon: const Icon(Icons.error, color: Colors.red),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.black87,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 3),
+          margin: const EdgeInsets.all(16.0),
+          borderRadius: 8.0,
+        );
       }
     }
   }
@@ -77,7 +97,17 @@ class ConversionAddController extends GetxController {
       clearFields();
       Get.back(result: true);
     } catch (e) {
-      Get.snackbar('Erro', 'Falha ao salvar conversão: $e');
+      Get.snackbar(
+        'Algo deu errado :(',
+        'Ocorreu um erro ao salvar a conversão.',
+        icon: const Icon(Icons.error, color: Colors.red),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.black87,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+        margin: const EdgeInsets.all(16.0),
+        borderRadius: 8.0,
+      );
     }
   }
 }
