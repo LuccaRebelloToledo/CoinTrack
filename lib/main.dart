@@ -9,18 +9,63 @@ import 'shared/database/database.dart';
 import 'package:coin_track/screens/home/home.dart';
 
 Future<void> initializeCurrencies() async {
-  final initializeCurrenciesService = InitializeCurrenciesService();
-  await initializeCurrenciesService.initialize();
+  try {
+    final initializeCurrenciesService = InitializeCurrenciesService();
+    await initializeCurrenciesService.initialize();
+  } catch (e) {
+    Get.snackbar(
+      'Erro ao inicializar moedas',
+      'Houve um problema ao carregar as moedas disponíveis. Por favor, tente novamente mais tarde.',
+      icon: const Icon(Icons.error, color: Colors.red),
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.black87,
+      colorText: Colors.white,
+      duration: const Duration(seconds: 3),
+      margin: const EdgeInsets.all(16.0),
+      borderRadius: 8.0,
+    );
+  }
 }
 
 Future<void> initializeDatabase() async {
-  final databaseHelper = DatabaseHelper();
-  await databaseHelper.initializeDatabase();
+  try {
+    final databaseHelper = DatabaseHelper();
+    await databaseHelper.initializeDatabase();
+  } catch (e) {
+    Get.snackbar(
+      'Erro ao inicializar o banco de dados',
+      'Houve um problema ao configurar o banco de dados. O aplicativo será fechado.',
+      icon: const Icon(Icons.error, color: Colors.red),
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.black87,
+      colorText: Colors.white,
+      duration: const Duration(seconds: 3),
+      margin: const EdgeInsets.all(16.0),
+      borderRadius: 8.0,
+    );
+    Future.delayed(const Duration(seconds: 3), () {
+      Get.back();
+    });
+  }
 }
 
 Future<void> updateConversionsRate() async {
-  final getAndUpdateLatestRatesService = GetAndUpdateLatestRatesService();
-  await getAndUpdateLatestRatesService.update();
+  try {
+    final getAndUpdateLatestRatesService = GetAndUpdateLatestRatesService();
+    await getAndUpdateLatestRatesService.update();
+  } catch (e) {
+    Get.snackbar(
+      'Erro ao inicializar moedas',
+      'Houve um problema ao atualizar a taxa de conversão de suas as moedas. Por favor, tente novamente mais tarde.',
+      icon: const Icon(Icons.error, color: Colors.red),
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.black87,
+      colorText: Colors.white,
+      duration: const Duration(seconds: 3),
+      margin: const EdgeInsets.all(16.0),
+      borderRadius: 8.0,
+    );
+  }
 }
 
 Future<void> initializeApp() async {
