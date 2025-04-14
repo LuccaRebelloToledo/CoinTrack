@@ -141,7 +141,7 @@ class _ChartScreenState extends State<ChartScreen> {
             return touchedSpots.map((touchedSpot) {
               return LineTooltipItem(
                 touchedSpot.y.toStringAsFixed(4),
-                const TextStyle(color: Colors.yellow, fontSize: 12),
+                const TextStyle(color: Color(0xFFF0B90B), fontSize: 12),
               );
             }).toList();
           },
