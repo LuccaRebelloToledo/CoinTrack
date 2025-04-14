@@ -52,7 +52,7 @@ class ConversionController extends GetxController {
       conversionItems.refresh();
 
       Get.snackbar(
-        'Sucesso :)',
+        'Sucesso!',
         'Conversão atualizada com sucesso.',
         icon: const Icon(Icons.check_circle, color: Colors.green),
         snackPosition: SnackPosition.BOTTOM,
@@ -82,7 +82,7 @@ class ConversionController extends GetxController {
       await _deleteConversionsService.delete(conversion);
 
       Get.snackbar(
-        'Sucesso :)',
+        'Sucesso!',
         'Conversão excluída com sucesso.',
         icon: const Icon(Icons.check_circle, color: Colors.green),
         snackPosition: SnackPosition.BOTTOM,
@@ -162,7 +162,7 @@ class ConversionScreen extends StatelessWidget {
           final result = await Get.dialog(ConversionAddModal());
           if (result == true) {
             Get.snackbar(
-              'Sucesso :)',
+              'Sucesso!',
               'Conversão salva com sucesso.',
               icon: const Icon(Icons.check_circle, color: Colors.green),
               snackPosition: SnackPosition.BOTTOM,
