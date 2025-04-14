@@ -40,12 +40,14 @@ class _ChartScreenState extends State<ChartScreen> {
     final dateFormat = DateFormat('yyyyMMdd');
 
     final threeMonthsAgo = dateFormat.format(
-      now.subtract(Duration(days: 30 * 3)),
+      now.subtract(Duration(days: 31 * 3)),
     );
+
     final twoMonthsAgo = dateFormat.format(
-      now.subtract(Duration(days: 30 * 2)),
+      now.subtract(Duration(days: 31 * 2)),
     );
-    final oneMonthAgo = dateFormat.format(now.subtract(Duration(days: 30)));
+
+    final oneMonthAgo = dateFormat.format(now.subtract(Duration(days: 31)));
 
     try {
       final threeMonthsRate = await _currencyHistoryService.get(
@@ -100,11 +102,15 @@ class _ChartScreenState extends State<ChartScreen> {
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
+            interval: 1,
             getTitlesWidget: (value, meta) {
               final label = xAxisLabels[value.toInt()];
-              return Text(
-                label,
-                style: const TextStyle(fontSize: 10, color: Colors.white),
+              return SideTitleWidget(
+                meta: meta,
+                child: Text(
+                  label,
+                  style: const TextStyle(fontSize: 10, color: Colors.white),
+                ),
               );
             },
           ),
@@ -123,18 +129,47 @@ class _ChartScreenState extends State<ChartScreen> {
           ),
         ),
       ),
-      borderData: FlBorderData(show: false),
+      borderData: FlBorderData(
+        show: true,
+        border: const Border(
+          bottom: BorderSide(color: Colors.white24, width: 1),
+        ),
+      ),
+      lineTouchData: LineTouchData(
+        touchTooltipData: LineTouchTooltipData(
+          getTooltipItems: (touchedSpots) {
+            return touchedSpots.map((touchedSpot) {
+              return LineTooltipItem(
+                touchedSpot.y.toStringAsFixed(4),
+                const TextStyle(color: Colors.yellow, fontSize: 12),
+              );
+            }).toList();
+          },
+        ),
+        handleBuiltInTouches: true,
+      ),
       lineBarsData: [
         LineChartBarData(
           spots: chartData,
-          isCurved: false,
-          color: Colors.yellow,
+          isCurved: true,
+          curveSmoothness: 0.2,
+          color: Color(0xFFF0B90B),
           dotData: FlDotData(show: false),
-          belowBarData: BarAreaData(show: true, color: Colors.yellow),
+          belowBarData: BarAreaData(
+            show: true,
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFFF0B90B).withOpacity(0.4),
+                Color(0xFFF0B90B).withOpacity(0.0),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
         ),
       ],
-      minY: minY,
-      maxY: maxY,
+      minY: minY - 1,
+      maxY: maxY + 1,
     );
   }
 
@@ -142,7 +177,7 @@ class _ChartScreenState extends State<ChartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(32.0),
         child:
             chartData.isNotEmpty
                 ? LineChart(buildLineChartData())
