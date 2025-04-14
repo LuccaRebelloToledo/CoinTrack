@@ -126,6 +126,7 @@ class ConversionScreen extends StatelessWidget {
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
               itemCount: controller.conversionItems.length,
+              addAutomaticKeepAlives: false,
               itemBuilder: (context, index) {
                 final item = controller.conversionItems[index];
                 return FadeInItem(
